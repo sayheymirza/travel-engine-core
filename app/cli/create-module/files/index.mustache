@@ -1,0 +1,13 @@
+import { Module } from "@core/module";
+import { {{module}}Controller } from "./controller";
+
+@Module({
+    id: "{{id}}",
+    name: "{{name}}",
+    version: "{{version}}"
+})
+export class {{module}}Module extends {{module}}Controller {
+    constructor() {
+        super();
+    }
+}

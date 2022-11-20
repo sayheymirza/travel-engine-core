@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"forceConsistentCasingInFileNames": true,
+        "experimentalDecorators": true,
+		"resolveJsonModule": true,
+		"target": "es2017",
+		"module": "commonjs",
+		"baseUrl": "./app",
+		"paths": {
+			"@lib/*": ["lib/*.ts", "lib/*"],
+			"@modules/*": ["modules/*.ts", "modules/index.ts", "modules/*"],
+			"@interface/*": ["interfaces/*.ts", "interfaces/*"],
+			"@core/*": ["core/*.ts", "core/*"],
+			"@middlewares/*": ["middlewares/*.ts", "middlewares/*"],
+			"@database/*": ["database/*.ts", "database/*"],
+			"@routes/index": ["routes/index.ts"]
+		},
+		"outDir": "./dist",
+		"esModuleInterop": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"typeRoots": ["./types"],
+		"types": ["jest", "node", "@types/jest"]
+	}
+}
