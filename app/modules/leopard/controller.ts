@@ -4,42 +4,60 @@ import format from "./format";
 import { IFormatSearchInput } from "@interface/format";
 // core
 import { AbstractModule } from "@core/module/abstract";
+// database
+import searchDB from "@database/search";
+import { IResponse } from "@interface/common";
 
 export class LeopardController extends AbstractModule {
-	public async search(data: IFormatSearchInput) {
+	public async search(data: IFormatSearchInput, token: string | undefined): Promise<IResponse> {
 		try {
 			const res = await api.search(format.fromRequestForSearch(data), {
 				module: this.defination!,
 			});
 
 			if (res.status == true) {
+				const data = res.data.result.pricedItineraries.map((item: any) =>
+					format.toResponseOfSearch(item, {
+						module: this.defination!.id,
+						custom: {
+							airlineImageEndpoint: "https://flight.logo.travel-engine.ir",
+							suffix: res.data.result.searchKey,
+						},
+					})
+				);
+
+				if (token)
+					searchDB.push(
+						token,
+						{
+							status: "success",
+							defination: this.defination!,
+						},
+						data
+					);
+
 				return {
 					status: true,
 					code: 200,
-					module: this.defination,
-					data: res.data.result.pricedItineraries.map((item: any) =>
-						format.toResponseOfSearch(item, {
-							module: this.defination!.id,
-							custom: {
-								airlineImageEndpoint: "https://flight.logo.travel-engine.ir",
-								suffix: res.data.result.searchKey,
-							},
-						})
-					),
+					data: data,
 				};
-			} else return res;
-		} catch (error) {
-			console.log(error);
+			}
+		} catch (error) {}
+		if (token)
+			searchDB.push(
+				token,
+				{
+					status: "faild",
+					defination: this.defination!,
+				},
+				[]
+			);
 
-			return {
-				status: false,
-				code: 500,
-				error: 0,
-				message: "Unhandled server error",
-				data: [],
-				debug: error,
-			};
-		}
+		return {
+			status: false,
+			code: 500,
+			data: [],
+		};
 	}
 
 	public async revalidate(refrence: string) {

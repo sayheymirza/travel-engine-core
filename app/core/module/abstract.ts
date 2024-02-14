@@ -5,7 +5,7 @@ import { IFormatSearchInput } from "@interface/format";
 export abstract class AbstractModule {
 	public readonly defination?: IModuleDefination;
 
-	abstract search(data: IFormatSearchInput): Promise<IResponse>;
+	abstract search(data: IFormatSearchInput, token: string | undefined): Promise<IResponse>;
 	abstract revalidate(refrenceId: string): Promise<IResponse>;
 	abstract refund(): Promise<IResponse>;
 	abstract reserve(): Promise<IResponse>;

@@ -10,7 +10,7 @@ export interface ILocation {
 	text: string;
 }
 
-export type TRemainingStatus =  "unnormal" | "empty" | "low" | "medium" | "high" | "normal";
+export type TRemainingStatus = "unnormal" | "empty" | "low" | "medium" | "high" | "normal";
 
 export interface ITag {
 	text: string;
@@ -27,6 +27,14 @@ export interface IResponse {
 }
 
 export interface ICodeName {
-	code: string
-	name: string
+	code: string;
+	name: string;
+}
+
+export interface ITimestamp {
+	start?: number;
+	startedAt?: string;
+	end?: number;
+	endedAt?: string;
+	duration?: number;
 }

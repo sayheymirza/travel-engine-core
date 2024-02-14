@@ -52,12 +52,13 @@ const toResponseOfSearchClass = (input: any, klass: any, option: IFormatSearchOu
 			module: option.module,
 			refrenceId: `${input.FlightNumber}_${klass.FareName}`,
 			provider: input.provider,
-			agencyId: option.agancy?.toString() ?? null,
+			agencyId: option.agency?.toString() ?? null,
 			price: {
 				adult: { ...priceAdult, commision: 0 },
 				child: { ...priceChild, commision: 0 },
 				infant: { ...priceInfant, commision: 0 },
 			},
+			performance: option.performance ?? "unknown",
 		},
 		refrenceId: refrenceId,
 		remaining: {

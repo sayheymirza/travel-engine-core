@@ -9,7 +9,7 @@ if (!AUTH_TOKEN_EXPIRE) {
 	AUTH_TOKEN_EXPIRE = "3600";
 }
 
-const setToken = (token: string, username: string) => Redis.setEx(`#/travel-engine-core/auth/token/${token}`, Number(AUTH_TOKEN_EXPIRE), username);
+const setToken = (token: string, username: string) => Redis.setex(`#/travel-engine-core/auth/token/${token}`, Number(AUTH_TOKEN_EXPIRE), username);
 
 const getToken = (token: string) => Redis.get(`#/travel-engine-core/auth/token/${token}`);
 

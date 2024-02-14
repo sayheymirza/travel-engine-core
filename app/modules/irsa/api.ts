@@ -3,13 +3,13 @@ import http from "@lib/http";
 // interfaces
 import { IAPIRequestOptions } from "./interface";
 
-const endpoint = "http://7owrang.api.faranegar.com/api";
+const endpoint = "https://0.0.0.0";
 
 const auth = async (data: any)=> {
     try {
         //
         const result = await http.request({
-            method: 'get',
+            method: '',
             path: '',
             endpoint: endpoint,
             data: data,
@@ -29,25 +29,18 @@ const auth = async (data: any)=> {
 
 const search = async (data: any, options: IAPIRequestOptions)=> {
     try {
-
-        
         //
         const result = await http.request({
-            method: 'POST',
-            path: '/Air_Availability',
+            method: '',
+            path: '',
             endpoint: endpoint,
             data: data,
+            headers: {
+                "": "", // authendication
+            }
         })
         //
-
-        return {
-			status: result.status == 200,
-			code: result.status,
-			error: result.status != 200 ? 2 : undefined,
-			message: result.status != 200 ? "Api request has error" : undefined,
-			data: result.status == 200 ? result.data : undefined,
-			debug: result.data,
-		};
+        return result;
     } catch (error) {
         return {
             status: false,
@@ -63,7 +56,7 @@ const revalidate = async (data: any, options: IAPIRequestOptions)=> {
     try {
         //
         const result = await http.request({
-            method: 'get',
+            method: '',
             path: '',
             endpoint: endpoint,
             data: data,
@@ -88,7 +81,7 @@ const refund = async (data: any, options: IAPIRequestOptions)=> {
     try {
         //
         const result = await http.request({
-            method: 'get',
+            method: '',
             path: '',
             endpoint: endpoint,
             data: data,
@@ -113,7 +106,7 @@ const reserve = async (data: any, options: IAPIRequestOptions)=> {
     try {
         //
         const result = await http.request({
-            method: 'get',
+            method: '',
             path: '',
             endpoint: endpoint,
             data: data,
@@ -138,7 +131,7 @@ const issue = async (data: any, options: IAPIRequestOptions)=> {
     try {
         //
         const result = await http.request({
-            method: 'get',
+            method: '',
             path: '',
             endpoint: endpoint,
             data: data,
@@ -163,7 +156,7 @@ const details = async (data: any, options: IAPIRequestOptions)=> {
     try {
         //
         const result = await http.request({
-            method: 'get',
+            method: '',
             path: '',
             endpoint: endpoint,
             data: data,
@@ -188,7 +181,7 @@ const ticket = async (data: any, options: IAPIRequestOptions)=> {
     try {
         //
         const result = await http.request({
-            method: 'get',
+            method: '',
             path: '',
             endpoint: endpoint,
             data: data,

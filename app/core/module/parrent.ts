@@ -1,34 +1,64 @@
-import { IModuleRevalidateParam, IModuleSearchParam, IModuleSearchResult } from "@interface/core/module";
+import { IModuleRevalidateParam, IModuleSearchParam } from "@interface/core/module";
 import { getModuleByKey, useModules } from ".";
 import searchDB from "@database/search";
-import { IDBSearch } from "@interface/database/search";
+import { IResponse } from "@interface/common";
 
-const search = async (param: IModuleSearchParam): Promise<IModuleSearchResult> => {
+const search = async (param: IModuleSearchParam): Promise<IResponse> => {
 	try {
 		const modules = useModules(param.modules as any);
-		const result = await Promise.all(modules.map((module) => module.search(param.data)));		
-		const output = result.flatMap((item) => item.data).filter((item) => item != null);
-		// @TODO format layer 2 needed
+
+		const start = Date.now();
+
+		const output = await Promise.all(modules.map((module) => module.search(param.data, undefined)));
+
+		const result = await searchDB.setForce({
+			start,
+			modules: modules.map((item) => item.defination!),
+			input: param.data,
+			output: output.flatMap((item) => item.data),
+		});
+
 		return {
-			searchToken: searchDB.set(param.data, output),
-			data: output,
+			status: true,
+			code: 200,
+			message: "All search results are in here",
+			data: result,
 		};
 	} catch (error) {
+		console.error(error)
 		return {
-			searchToken: undefined,
-			data: [],
+			status: false,
+			code: 500,
+			error: 2,
+			message: "Unhandled server error",
 		};
+	}
+};
+
+const searchLazy = async (param: IModuleSearchParam): Promise<any | undefined> => {
+	try {
+		const modules = useModules(param.modules as any);
+
+		const result = await searchDB.set(
+			modules.map((item) => item.defination!),
+			param.data
+		);
+
+		modules.map((module) => module.search(param.data, result.token));
+
+		return result;
+	} catch (error) {
+		return undefined;
 	}
 };
 
 const revalidate = async (param: IModuleRevalidateParam): Promise<any> => {
 	try {
-		const savedResult = await searchDB.get(param.searchToken);
+		const data = await searchDB.get(param.searchToken);
 
-		if (savedResult == null) {
+		if (data == null) {
 			return {};
 		}
-		const data: IDBSearch = JSON.parse(savedResult);
 
 		const item = data.output.find((item) => item.refrenceId == param.refrenceId);
 		if (item == undefined) {
@@ -51,5 +81,6 @@ const revalidate = async (param: IModuleRevalidateParam): Promise<any> => {
 
 export default {
 	search,
+	searchLazy,
 	revalidate,
 };

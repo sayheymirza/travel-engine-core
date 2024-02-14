@@ -4,3 +4,4 @@ import "dotenv/config";
 import "@core/swagger";
 // lib
 import "@lib/redis";
+import "@lib/mongo";

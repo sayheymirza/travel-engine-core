@@ -169,6 +169,7 @@ const toResponseOfSearch = (input: any, option: IFormatSearchOutputOptions): IFo
 				child: { ...priceChild, commision: 0 },
 				infant: { ...priceInfant, commision: 0 },
 			},
+			performance: 'fast'
 		},
 		refrenceId: refrenceId,
 		remaining: {

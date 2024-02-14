@@ -76,6 +76,7 @@ export interface IFormatSearchOutputRef {
 	refrenceId: string; // module refrence id
 	agencyId: string | null;
 	price: IFormatSearchOutputRefPrice;
+	performance: "realtime" | "fast" | "lazy" | "unknown";
 }
 
 export interface IFormatSearchOutputPriceItemTax {
@@ -119,5 +120,6 @@ export interface IFormatSearchOutputCustomize {
 export interface IFormatSearchOutputOptions {
 	custom: IFormatSearchOutputCustomize;
 	module: string;
-	agancy?: string | number;
+	agency?: string | number;
+	performance?: "realtime" | "fast" | "lazy" | "unknown";
 }

@@ -12,11 +12,6 @@ export interface IModuleSearchParam {
 	modules: string[];
 }
 
-export interface IModuleSearchResult {
-	searchToken: string | undefined;
-	data: IResponse[];
-}
-
 export interface IModuleRevalidateParam {
 	searchToken: string;
 	refrenceId: string;

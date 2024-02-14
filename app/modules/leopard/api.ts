@@ -57,8 +57,6 @@ const search = async (data: ILeopardSearchInput, options: IAPIRequestOptions) =>
 			debug: result.data,
 		};
 	} catch (error) {
-		console.log(error);
-
 		return {
 			status: false,
 			code: 500,
@@ -94,7 +92,6 @@ const revalidate = async (data: any, options: IAPIRequestOptions) => {
 			debug: result.data,
 		};
 	} catch (error) {
-		console.log(error);
 		return {
 			status: false,
 			code: 500,

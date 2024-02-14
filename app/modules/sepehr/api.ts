@@ -1,70 +1,35 @@
-// lib
-import http from "@lib/http";
 import format from "./format";
+import helper from "./helper";
+// lib
+import http, { IHTTPRequestParam } from "@lib/http";
 // interfaces
 import { IAPIRequestOptions, ISepehrSearchInput } from "./interface";
 
 const endpoint = "https://0.0.0.0";
 
-const agancies = [
-	{
-		name: "sepehr-test",
-		code: "1",
-		endpoint: "http://45.156.186.30:5831/https://SepehrApiTest.ir",
-		username: "yahaghi",
-		password: "8f69c378b617f162c0d82c5ef41fa120",
-	},
-];
-
-const auth = async (data: any) => {
-	try {
-		//
-		const result = await http.request({
-			method: "get",
-			path: "",
-			endpoint: endpoint,
-			data: data,
-		});
-		//
-		return result;
-	} catch (error) {
-		return {
-			status: false,
-			code: 500,
-			error: 1,
-			message: "Api request faild",
-			debug: error,
-		};
-	}
-};
 
 const search = async (data: ISepehrSearchInput, options: IAPIRequestOptions) => {
 	try {
-		const requests = agancies.map((agancy) => {
-			return http.request({
-				method: "post",
-				path: "/api/Partners/Flight/Availability/V12/SearchByRouteAndDate",
-				endpoint: agancy.endpoint,
-				data: {
-					UserName: agancy.username,
-					Password: agancy.password,
-					...data,
-				},
-			});
-		});
+		const requests = options.agencies.map((agency) =>
+			helper.requestSearch({
+				input: data,
+				agency: agency,
+				organization: "",
+			})
+		);
 
 		const responses = await Promise.all(requests);
 
-		const flights = responses.flatMap((response, index) => response.data.CharterFlights.map((item: any) => ({ ...item, agancy: agancies[index] })));
+		const flights = responses
+			.filter((response) => response.status == true && response.data && response.data.CharterFlights && Array.isArray(response.data.CharterFlights))
+			.flatMap((response, index) => response.data.CharterFlights.map((item: any) => ({ ...item, agency: options.agencies[index], performance: response.code == 1 ? "fast" : "lazy" })));
 
 		return {
 			status: true,
 			code: 200,
-			message: undefined,
 			data: flights,
 		};
 	} catch (error) {
-		console.log(error);
 		return {
 			status: false,
 			code: 500,
@@ -226,7 +191,6 @@ const ticket = async (data: any, options: IAPIRequestOptions) => {
 };
 
 export default {
-	auth,
 	search,
 	revalidate,
 	refund,

@@ -9,6 +9,8 @@ export interface IHTTPRequestParam {
 	data?: any;
 	headers?: any;
 	module?: IModuleDefination;
+	timeout?: number;
+	signal?: any;
 }
 
 const request = async (param: IHTTPRequestParam) => {
@@ -18,17 +20,20 @@ const request = async (param: IHTTPRequestParam) => {
 		method: param.method,
 		data: param.data,
 		headers: param.headers,
+		timeout: param.timeout ? param.timeout : undefined,
 	};
 
 	let res: AxiosResponse<any, any>;
 	let end: number;
 
 	try {
-		res = await axios(request);
+		const _request = { ...request };
+		if (param.signal) _request.signal = param.signal;
+		res = await axios(_request);
 	} catch (error) {
 		res = error as any;
 	}
-	
+
 	end = Date.now();
 
 	HTTPLogger({

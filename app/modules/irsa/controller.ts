@@ -4,7 +4,7 @@ import { IFormatSearchInput } from "@interface/format";
 // core
 import { AbstractModule } from "@core/module/abstract";
 
-export class {{module}}Controller extends AbstractModule {
+export class IrsaController extends AbstractModule {
     public async search(data: IFormatSearchInput, token: string) {
         try {
             return {
